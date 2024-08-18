@@ -12,6 +12,7 @@ namespace _2024FinalYearProject.Data
         public DbSet<BankAccount> BankAccounts { get; set; }
         public DbSet<Notification> Notifications { get; set; }
         public DbSet<Transaction> Transactions { get; set; }
+        public DbSet<FeedBack> FeedBacks { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
