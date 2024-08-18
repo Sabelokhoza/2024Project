@@ -1,4 +1,5 @@
 using _2024FinalYearProject.Data;
+using _2024FinalYearProject.Data.Interfaces;
 using _2024FinalYearProject.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -20,7 +21,9 @@ opts.UseSqlServer(connString, opts =>
 
 builder.Services.AddIdentityCore<AppUser>().AddRoles<IdentityRole>()
 .AddEntityFrameworkStores<AppDbContext>();
-//builder.Services.AddScoped<IRepositoryWrapper, RepositoryWrapper>();
+builder.Services.AddScoped(typeof(IRepositoryBase<>), typeof(RepositoryBase<>));
+builder.Services.AddScoped<IRepositoryWrapper, RepositoryWrapper>();
+
 
 //Configure middleware
 var app = builder.Build();
