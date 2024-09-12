@@ -1,0 +1,310 @@
+﻿@model ClientIndexViewModel
+
+
+@{
+    ViewBag.Title = "My Wallet";
+}
+
+<style>
+    .sidebar {
+        height: 100vh;
+    }
+
+    .ImagesColor {
+        color: #1a2b3c;
+    }
+
+    i {
+        color: #ff7700;
+    }
+
+    .sidebar h4 {
+        font-weight: bold;
+    }
+
+    .sidebar .nav-link {
+        font-size: 1.1rem;
+        font-weight: 500;
+        padding: 15px 20px;
+        color: #333;
+    }
+
+        .sidebar .nav-link.active {
+            background-color: #eaf3e2;
+            color: #333;
+            font-weight: bold;
+        }
+
+    .card {
+        border-radius: 15px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .search-bar input {
+        border-radius: 30px;
+        padding-left: 15px;
+        width: 250px;
+    }
+
+    .card-body {
+        position: relative;
+    }
+
+        .card-body .card-title {
+            font-size: 1.25rem;
+            font-weight: bold;
+        }
+
+        .card-body .card-text {
+            color: #555;
+        }
+
+        .card-body .fab, .card-body .fas {
+            color: #333;
+        }
+
+    .frm {
+        max-width: 500px;
+        padding: 20px;
+    }
+
+    label {
+        font-weight: bold;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+
+    button.btn-primary,
+    a.btn-secondary {
+        margin-right: 10px;
+    }
+
+</style>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-2 bg-light sidebar">
+            <div class="d-flex align-items-center py-3">
+                <i class="fas fa-circle me-2 text-success"></i>
+                <h4 class="m-0">Account</h4>
+            </div>
+            <ul class="nav flex-column">
+                <li class="nav-item">
+                    <a class="nav-link " asp-action="Index"><i class="fas fa-home me-2"></i> Dashboard</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" asp-action="UserLogins"><i class="fas fa-chart-line me-2"></i> Log-ins</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" asp-action="Account"><i class="fa-solid fa-user"></i>Manage Profile</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link active" asp-action="Wallet"><i class="fas fa-wallet me-2"></i> My Wallet</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" asp-action="Transactions"><i class="fas fa-exchange-alt me-2"></i> Transactions</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" asp-action="Messages"><i class="fas fa-envelope me-2"></i> Messages</a>
+                </li>
+            </ul>
+        </div>
+        <div class="col-10 p-4">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div>
+                    <h4>Hello, @Model.user.FirstName</h4>
+                    <p>You can update profile information</p>
+                </div>
+
+            </div>
+
+            <div class="card">
+
+                <div class="card-body d-flex align-items-center">
+                    <img src="https://via.placeholder.com/100x60.png?text=CHARGE" class="me-3" alt="Card Image">
+                    <div>
+                        <h4 class="card-title mb-0">Account Number : @Model.bankAccount.AccountNumber</h4>
+                        <br>
+                        <p class="card-text mb-0"> Name : @Model.user.UserName</p>
+                        <small>Date : @Model.Date</small>
+                    </div>
+                   
+
+                    <div class="ms-auto">
+                        Amount: R @Model.bankAccount.Balance.ToString("0.00")    <i class="fab fa-cc-visa fa-2x"></i>
+                    </div>
+
+                </div>
+                <div >
+                    <h5 class="">Transfer</h5>
+                    <form method="post" action="Transfer" class="row g-3 align-items-center" id="depositForm">
+                        <!-- Error message div -->
+                        <div id="error-message" class="text-danger mt-2"></div>
+                        <div class="col-auto">
+                            <input type="number" name="accountNo" class="form-control" id="accountNo" placeholder="Account No.">
+                        </div>
+                        <div class="col-auto">
+                            <input type="number" name="amount" class="form-control" id="transferAmount" placeholder="Amount">
+                        </div>
+                        <div class="col-auto">
+                            <button type="submit" class="btn btn-primary" onclick="onTransfer()">Transfer</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <i class="fas fa-wallet fa-3x mb-3 ImagesColor"></i>
+                                <h5>Total Income</h5>
+                                <p class="mb-0">R @Model.moneyIn.ToString("0.00")</p>
+                                <span class="text-success">↑ </span>
+                                <form method="post" action="Deposit" class="row g-3 align-items-center" id="depositForm">
+                                    <!-- Error message div -->
+                                    <div id="error-message" class="text-danger mt-2"></div>
+                                    <div class="col-auto">
+                                        <input type="number" name="amount" class="form-control" id="depositAmount" placeholder="Deposit">
+                                    </div>
+                                    <div class="col-auto">
+                                        <button type="submit" class="btn btn-primary" onclick="onDeposit()">Deposit</button>
+                                    </div>
+                                </form>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <i class="fas fa-credit-card fa-3x mb-3 ImagesColor"></i>
+                                <h5>Total Expenses</h5>
+                                <p class="mb-0">R @Model.moneyOut.ToString("0.00")</p>
+                                <span class="text-danger">↓</span>
+                                <form method="post" action="Withdraw" class="row g-3 align-items-center" id="withdrawForm">
+                                    <!-- Error message div -->
+                                    <div id="error-message" class="text-danger mt-2"></div>
+                                    <div class="col-auto">
+                                        <input type="number" name="amount" class="form-control" id="withdrawAmount" placeholder="Withdraw">
+                                    </div>
+                                    <div class="col-auto">
+                                        <button type="submit" class="btn btn-danger btn-sm" onclick="onWithdraw('@Model.bankAccount.Balance')">
+                                           Withdraw
+                                        </button>
+
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+               
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+@section Scripts {
+    <script>
+        // Withdrawal function
+        function onWithdraw(amount) {
+            let withdrawAmountValue = parseFloat(document.getElementById('withdrawAmount').value);
+            let accountBalance = parseFloat(amount); // Assume this value comes from backend
+
+            // Debugging: Log the values to ensure they are correct
+            console.log("Withdraw Amount:", withdrawAmountValue);
+            console.log("Account Balance:", accountBalance);
+
+            // Validate the input
+            if (isNaN(withdrawAmountValue) || withdrawAmountValue <= 0) {
+                alert("Please enter a valid positive amount.");
+                return;
+            }
+
+            if (withdrawAmountValue > accountBalance) {
+                alert("You cannot withdraw more than your available balance!");
+                return;
+            }
+
+            const confirmation = confirm("Are you sure you want to withdraw this amount?");
+            if (confirmation) {
+                alert("Transaction successful.");
+            } else {
+                alert("Transaction canceled.");
+            }
+        }
+
+        // Deposit function
+        function onDeposit() {
+            let depositAmountValue = parseFloat(document.getElementById('depositAmount').value);
+
+            // Debugging: Log the value to ensure it is correct
+            console.log("Deposit Amount:", depositAmountValue);
+
+            // Validate the input
+            if (isNaN(depositAmountValue) || depositAmountValue <= 0) {
+                alert("Please enter a valid positive amount.");
+                return;
+            }
+
+            const confirmation = confirm("Are you sure you want to deposit this amount?");
+            if (confirmation) {
+                alert("Deposit successful.");
+            } else {
+                alert("Deposit canceled.");
+                document.getElementById('depositAmount').value = 0;
+            }
+        }
+
+        // Transfer function
+        function onTransfer() {
+            // Get the transfer amount, account balance, and account number
+            let transferAmount = parseFloat(document.getElementById('transferAmount').value);
+            let accountBalance = parseFloat('@Model.bankAccount.Balance');
+            let accountNo = document.getElementById('accountNo').value.trim();
+
+            // Debugging: Log the values
+            console.log("Transfer Amount:", transferAmount);
+            console.log("Account Balance:", accountBalance);
+            console.log("Account Number:", accountNo);
+
+            // Validate if the account number is not empty
+            if (!accountNo) {
+                alert("Please enter a valid account number.");
+                return false; // Stop form submission
+            }
+
+            // Validate if transfer amount is valid and not greater than the balance
+            if (isNaN(transferAmount) || transferAmount <= 0) {
+                alert("Please enter a valid transfer amount.");
+                return false; // Stop form submission
+            }
+
+            if (transferAmount > accountBalance) {
+                alert("You cannot transfer more than your available balance.");
+                return false; // Stop form submission
+            }
+
+            // Confirmation prompt before proceeding
+            const confirmation = confirm("Are you sure you want to transfer this amount?");
+            if (confirmation) {
+                alert("Transfer successful.");
+                return true; // Allow form submission
+            } else {
+                alert("Transfer canceled.");
+                return false; // Stop form submission
+            }
+        }
+    </script>
+}
+
+

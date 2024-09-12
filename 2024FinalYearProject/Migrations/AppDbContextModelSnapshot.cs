@@ -51,15 +51,27 @@ namespace _2024FinalYearProject.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "2ca61e3c-7d6e-45c5-aea9-09dde9d81ae0",
+                            Id = "89db8047-c66c-43a6-b65f-06431c402993",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "c127a51a-b7c4-4a8d-9a45-aa0c3b4909ec",
+                            Id = "74ada071-f031-456e-9542-48b3482783e4",
                             Name = "User",
                             NormalizedName = "USER"
+                        },
+                        new
+                        {
+                            Id = "9c715a60-a494-4a44-bd7c-aeb0d8fa57ae",
+                            Name = "Consultant",
+                            NormalizedName = "CONSULTANT"
+                        },
+                        new
+                        {
+                            Id = "ebebf595-4011-488e-8669-e8f3cc2166b9",
+                            Name = "Advisor",
+                            NormalizedName = "ADVISOR"
                         });
                 });
 
@@ -169,6 +181,28 @@ namespace _2024FinalYearProject.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("_2024FinalYearProject.Models.Advice", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("AdviceText")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("advisorId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("clientId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Advices");
+                });
+
             modelBuilder.Entity("_2024FinalYearProject.Models.AppUser", b =>
                 {
                     b.Property<string>("Id")
@@ -177,12 +211,15 @@ namespace _2024FinalYearProject.Migrations
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
 
+                    b.Property<string>("AccountNumber")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateOnly>("DateOfBirth")
-                        .HasColumnType("date");
+                    b.Property<DateTime>("DateOfBirth")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Email")
                         .HasMaxLength(256)
@@ -192,15 +229,12 @@ namespace _2024FinalYearProject.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("FirstName")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("IDnumber")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("LastName")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("LockoutEnabled")
@@ -229,12 +263,18 @@ namespace _2024FinalYearProject.Migrations
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("StudentStaffNumber")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("bit");
 
                     b.Property<string>("UserName")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("UserRole")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -258,26 +298,18 @@ namespace _2024FinalYearProject.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("AccountNumber")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("AccountOrder")
-                        .HasColumnType("int");
-
-                    b.Property<string>("AppUserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
 
                     b.Property<decimal>("Balance")
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("BankAccountType")
-                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserEmail")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("AppUserId");
 
                     b.ToTable("BankAccounts");
                 });
@@ -290,16 +322,14 @@ namespace _2024FinalYearProject.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("AppUserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Comment")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Rate")
                         .HasColumnType("int");
+
+                    b.Property<string>("UserEmail")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("dateTime")
                         .HasColumnType("datetime2");
@@ -307,6 +337,25 @@ namespace _2024FinalYearProject.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("FeedBacks");
+                });
+
+            modelBuilder.Entity("_2024FinalYearProject.Models.LoginSessions", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("TimeStamp")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UserEmail")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("LoginSessions");
                 });
 
             modelBuilder.Entity("_2024FinalYearProject.Models.Notification", b =>
@@ -317,23 +366,19 @@ namespace _2024FinalYearProject.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("AppUserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<bool>("IsRead")
                         .HasColumnType("bit");
 
                     b.Property<string>("Message")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("NotificationDate")
                         .HasColumnType("datetime2");
 
-                    b.HasKey("Id");
+                    b.Property<string>("UserEmail")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.HasIndex("AppUserId");
+                    b.HasKey("Id");
 
                     b.ToTable("Notifications");
                 });
@@ -349,10 +394,6 @@ namespace _2024FinalYearProject.Migrations
                     b.Property<decimal>("Amount")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<string>("AppUserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<int?>("BankAccountId")
                         .HasColumnType("int");
 
@@ -363,15 +404,18 @@ namespace _2024FinalYearProject.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Reference")
-                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TrandactionType")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("TransactionDate")
                         .HasColumnType("datetime2");
 
-                    b.HasKey("Id");
+                    b.Property<string>("UserEmail")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.HasIndex("AppUserId");
+                    b.HasKey("Id");
 
                     b.HasIndex("BankAccountId");
 
@@ -429,41 +473,11 @@ namespace _2024FinalYearProject.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("_2024FinalYearProject.Models.BankAccount", b =>
-                {
-                    b.HasOne("_2024FinalYearProject.Models.AppUser", "AppUser")
-                        .WithMany()
-                        .HasForeignKey("AppUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("AppUser");
-                });
-
-            modelBuilder.Entity("_2024FinalYearProject.Models.Notification", b =>
-                {
-                    b.HasOne("_2024FinalYearProject.Models.AppUser", "AppUser")
-                        .WithMany()
-                        .HasForeignKey("AppUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("AppUser");
-                });
-
             modelBuilder.Entity("_2024FinalYearProject.Models.Transaction", b =>
                 {
-                    b.HasOne("_2024FinalYearProject.Models.AppUser", "AppUser")
-                        .WithMany()
-                        .HasForeignKey("AppUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("_2024FinalYearProject.Models.BankAccount", null)
                         .WithMany("Transactions")
                         .HasForeignKey("BankAccountId");
-
-                    b.Navigation("AppUser");
                 });
 
             modelBuilder.Entity("_2024FinalYearProject.Models.BankAccount", b =>

@@ -1,0 +1,159 @@
+@model RegisterViewModel
+
+<style>
+    .main-container {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        background-color: #f8f9fa;
+    }
+
+    .register-container {
+        background-color: white;
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .left-side {
+        background: url('/api/placeholder/1200/800') no-repeat center center;
+        background-size: cover;
+        position: relative;
+        min-height: 400px;
+    }
+
+        .left-side::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            background: linear-gradient(135deg, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.4) 100%);
+        }
+
+    .left-content {
+        position: relative;
+        z-index: 1;
+        color: white;
+        padding: 40px;
+    }
+
+    .social-icons a {
+        color: white;
+        margin-right: 15px;
+        font-size: 1.2em;
+        transition: opacity 0.3s ease;
+    }
+
+        .social-icons a:hover {
+            opacity: 0.7;
+        }
+
+    .form-label {
+        font-size: 0.9em;
+        font-weight: 600;
+        color: #495057;
+    }
+
+    .btn-register {
+        background-color: #ff7700;
+        border: none;
+        transition: background-color 0.3s ease;
+    }
+
+        .btn-register:hover {
+            background-color: #e66c00;
+        }
+</style>
+
+<div class="container-fluid main-container py-5">
+    <div class="container register-container">
+        <div class="row">
+            <div class="col-md-6 left-side">
+                <div class="left-content">
+                    <h1 class="display-4 mb-4">Register Now</h1>
+                    <p class="lead">Join our academic community today. Whether you're a student or staff, we're excited to have you on board.</p>
+                    <div class="social-icons mt-4">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 p-5">
+                <div class="mb-4">
+                    <div class="btn-group w-100">
+                        <a asp-controller="Account" asp-action="Register" asp-route-registerAs="student"
+                           class="btn btn-outline-primary @(Model.RegisterAs == "student" ? "active" : "")">Student</a>
+                        <a asp-controller="Account" asp-action="Register" asp-route-registerAs="staff"
+                           class="btn btn-outline-primary @(Model.RegisterAs == "staff" ? "active" : "")">Staff</a>
+                    </div>
+                </div>
+
+                <form asp-action="Register" asp-controller="Account" method="post">
+                    <input type="hidden" asp-for="RegisterAs" />
+                    <div asp-validation-summary="All" class="text-danger"></div>
+                    <div class="mb-3">
+                        <label asp-for="EmailAddress" class="form-label">Email Address</label>
+                        <input asp-for="EmailAddress" class="form-control" autocomplete="off" />
+                        <span asp-validation-for="EmailAddress" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="IdPassportNumber" class="form-label">ID/Passport Number</label>
+                        <input asp-for="IdPassportNumber" class="form-control" autocomplete="off" />
+                        <span asp-validation-for="IdPassportNumber" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="StudentStaffNumber" class="form-label">Student/Staff Number</label>
+                        <input asp-for="StudentStaffNumber" class="form-control" autocomplete="off" />
+                        <span asp-validation-for="StudentStaffNumber" class="text-danger"></span>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="FirstName" class="form-label">First Name</label>
+                            <input asp-for="FirstName" class="form-control" autocomplete="off" />
+                            <span asp-validation-for="FirstName" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="LastName" class="form-label">Last Name</label>
+                            <input asp-for="LastName" class="form-control" autocomplete="off" />
+                            <span asp-validation-for="LastName" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Password" class="form-label">Password</label>
+                        <input asp-for="Password" class="form-control" autocomplete="off" />
+                        <span asp-validation-for="Password" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="ConfirmPassword" class="form-label">Confirm Password</label>
+                        <input asp-for="ConfirmPassword" class="form-control" autocomplete="off" />
+                        <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                    </div>
+
+                    <button type="submit" class="btn btn-register btn-lg w-100 text-white">
+                        <i class="fas fa-user-plus me-2"></i>Create Account
+                    </button>
+
+                    <div class="text-center mt-3">
+                        Already have an account?
+                        <a asp-action="Login" asp-controller="Account" class="ms-2 text-decoration-none">Login</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

@@ -1,0 +1,229 @@
+﻿@using _2024FinalYearProject.Models.ViewModels.FinacialAdvisor
+@model AdviceViewModel
+
+@{
+    ViewBag.Title = "Financial Advise Users Page";
+}
+
+<style>
+    .sidebar {
+        height: 100vh;
+    }
+
+    .ImagesColor {
+        color: #1a2b3c;
+    }
+
+    .sidebar h4 {
+        font-weight: bold;
+    }
+
+    .sidebar .nav-link {
+        font-size: 1.1rem;
+        font-weight: 500;
+        padding: 15px 20px;
+        color: #333;
+    }
+
+    .frm {
+        padding: 30px;
+        border: 1px solid #e0e0e0;
+        border-radius: 10px;
+        background-color: #f9f9f9;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    }
+
+        .frm h2 {
+            font-size: 1.75rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            text-align: center;
+            color: #333;
+        }
+
+        .frm label {
+            font-weight: bold;
+            font-size: 1rem;
+            margin-bottom: 8px;
+            display: block;
+            color: #555;
+        }
+
+        .frm textarea {
+            border-radius: 8px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
+            width: 100%;
+            font-size: 1rem;
+        }
+
+        .frm .form-group {
+            margin-bottom: 20px;
+        }
+
+            .frm .form-group label {
+                font-size: 1rem;
+                color: #333;
+            }
+
+        .frm .form-control {
+            font-size: 1rem;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        .frm button[type="submit"] {
+            background-color: #ff7700;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-size: 1rem;
+            transition: background-color 0.3s ease;
+            width: 100%;
+        }
+
+            .frm button[type="submit"]:hover {
+                background-color: #e86600;
+            }
+
+   
+
+
+        .sidebar .nav-link.active {
+            background-color: #eaf3e2;
+            color: #333;
+            font-weight: bold;
+        }
+
+    .card {
+        border-radius: 15px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .search-bar input {
+        border-radius: 30px;
+        padding-left: 15px;
+        width: 250px;
+    }
+
+    .card-body {
+        position: relative;
+    }
+
+        .card-body .card-title {
+            font-size: 1.25rem;
+            font-weight: bold;
+        }
+
+        .card-body .card-text {
+            color: #555;
+        }
+
+        .card-body .fab, .card-body .fas {
+            color: #333;
+        }
+
+</style>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-2 bg-light sidebar">
+            <div class="d-flex align-items-center py-3">
+                <i class="fas fa-circle me-2 text-success"></i>
+                <h4 class="m-0">Advisor</h4>
+            </div>
+            <ul class="nav flex-column">
+                <li class="nav-item">
+                    <a class="nav-link" asp-action="Index"><i class="fa-duotone fa-solid fa-table-columns"></i> Dashboard</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link active" asp-controller="FinancialAdvisor" asp-action="Users"> <i class="fa-solid fa-users"></i> Users</a>
+                </li>
+                
+            </ul>
+        </div>
+        <div class="col-10 p-4">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div>
+                    <h4>Hello, @Model.AppUser.FirstName</h4>
+                    <p>You can Advise @Model.Client.FirstName</p>
+                </div>
+
+            </div>
+
+            <h3 class="fw-bold fs-4 my-3">
+                Latest Transactions
+            </h3>
+            <div class="row">
+                <div class="col-12">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr class="highlight">
+                                <th scope="col">#</th>
+                                <th scope="col"><i class="fa-solid fa-user"></i> From</th>
+                                <th scope="col"> <i class="fa-solid fa-user"></i>To</th>
+                                <th scope="col"> <i class="fa-solid fa-money-bill-trend-up"></i> Amount</th>
+                                <th scope="col"> <i class="fa-solid fa-money-bill-trend-up"></i> Manage</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model.Transactions.Count() == 0)
+                            {
+                                <tr>
+                                    <td colspan="6" class="text-center">
+                                        <i class="fas fa-exclamation-triangle red-icon"></i> No Transactions
+                                    </td>
+                                </tr>
+                            }
+                            @foreach (var transaction in Model.Transactions)
+                            {
+                                <tr>
+                                    <th scope="row">1</th>
+                                    <td>@transaction.BankAccountIdSender</td>
+                                    <td>@transaction.BankAccountIdReceiver</td>
+                                    <td>R @transaction.Amount.ToString("0.00")</td>
+                                    <td>
+                                        <button type="button" class="btn btn-primary btn-sm">
+                                            <i class="fa-solid fa-pen-to-square"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-danger btn-sm" onclick="openDeleteModal('@transaction.Id', '@transaction.Amount.ToString("0.00")')">
+                                            <i class="fa-solid fa-trash"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+
+                    <form method="post" asp-action="Comment" class="frm">
+                        <h2>Give advice</h2>
+                        <input name="clientId" value="@Model.Client.Id" hidden>
+                        <input name="advisorId" value="@Model.AppUser.Id" hidden>
+
+                        <div class="form-group">
+                            <label> <i class="fa-solid fa-money-bill-trend-up"></i> Balance: R @Model.BankAccount.Balance.ToString("0.00")</label>
+                            <br />
+                            <label><i class="fa-solid fa-money-bill-trend-up"></i>  Money-in: R @Model.MoneyIn.ToString("0.00")</label>
+                            <br />
+                            <label><i class="fa-solid fa-money-bill-trend-up"></i>  Money-out: R @Model.MoneyOut.ToString("0.00")</label>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="Comment"><i class="fa-duotone fa-solid fa-comment"></i> Comment</label>
+                            <textarea id="Comment" name="Comment" class="form-control" rows="4" required></textarea>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+
+
+    </div>
+</div>
