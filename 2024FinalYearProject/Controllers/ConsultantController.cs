@@ -59,7 +59,7 @@ namespace _2024FinalYearProject.Controllers
                 if (Password != ConfirmPassword || Password == string.Empty || ConfirmPassword == string.Empty)
                 {
                     ModelState.AddModelError("", "Password and Confirm Password must match");
-                   
+
                     return View("Password", model);
                 }
                 else
@@ -98,7 +98,7 @@ namespace _2024FinalYearProject.Controllers
 
                             await wrapper.Notification.AddAsync(notification);
                             ModelState.AddModelError("", "Password has been reset successfully");
-                            return RedirectToAction("Password",model);
+                            return RedirectToAction("Password", model);
                         }
                         else
                         {
@@ -110,6 +110,96 @@ namespace _2024FinalYearProject.Controllers
 
             }
             return View("Password", model);
+        }
+
+        public async Task<IActionResult> UserReport(string Id)
+        {
+            var client = await userManager.FindByIdAsync(Id);
+            var user = await userManager.FindByNameAsync(User.Identity.Name);
+            var report = new Report()
+            {
+                Message = $"Generated {client.UserName} transaction report information",
+                userName = user.UserName
+            };
+
+            await wrapper.report.AddAsync(report);
+            return RedirectToAction("Users");
+
+        }
+
+        public async Task<IActionResult> UsersReport()
+        {
+            try
+            {
+                var user = await userManager.FindByNameAsync(User.Identity.Name);
+                var report = new Report()
+                {
+                    Message = "Generated all users report and their account balance information",
+                    userName = user.UserName
+                };
+                await wrapper.report.AddAsync(report);
+                var users = await wrapper.AppUser.GetAllUsersAndBankDetails();
+
+                var html = @"
+                <!DOCTYPE html>
+                <html lang='en'>
+                <head>
+                    <meta charset='UTF-8'>
+                    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+                    <title>Users Bank Details Report</title>
+                    <style>
+                        body { font-family: Arial, sans-serif; margin: 0; padding: 20px; }
+                        h1 { color: #333; text-align: center; }
+                        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+                        th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
+                        th { background-color: #f2f2f2; color: #333; font-weight: bold; }
+                        tr:nth-child(even) { background-color: #f9f9f9; }
+                        tr:hover { background-color: #f5f5f5; }
+                    </style>
+                </head>
+                <body>
+                    <h1>Users Bank Details Report</h1>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Surname</th>
+                                <th>Email</th>
+                                <th>Balance</th>
+                                <th>Money In</th>
+                                <th>Money Out</th>
+                            </tr>
+                        </thead>
+                        <tbody>";
+
+                                foreach (var _user in users)
+                                {
+                                    html += $@"
+                            <tr>
+                                <td>{_user.AppUser.FirstName}</td>
+                                <td>{_user.AppUser.LastName}</td>
+                                <td>{_user.AppUser.Email}</td>
+                                <td>R { _user.BankAccount.Balance}</td>
+                                <td>R {_user.MoneyIn}</td>
+                                <td>R {_user.MoneyOut}</td>
+                            </tr>";
+                                }
+
+                                html += @"
+                        </tbody>
+                    </table>
+                </body>
+                </html>";
+
+                var fileName = "users_bank_details.html";
+                var reportBytes = Encoding.UTF8.GetBytes(html);
+                return File(reportBytes, "text/html", fileName);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return BadRequest("An error occurred during report generation.");
+            }
         }
 
         public async Task<IActionResult> Index()
@@ -147,12 +237,12 @@ namespace _2024FinalYearProject.Controllers
 
             var user = await userManager.FindByNameAsync(username);
             var client = await userManager.FindByIdAsync(Id);
-            var  transactions = (await wrapper.Transaction.GetAllAsync()).
-                Where(t => int.Parse(client.AccountNumber) == t.BankAccountIdReceiver  ||
-                t.BankAccountIdSender ==  int.Parse(client.AccountNumber)).OrderByDescending(o => o.TransactionDate).ToList();
-            
-           var model = new Models.ViewModels.Consultant.TransactionsViewModel
-           {
+            var transactions = (await wrapper.Transaction.GetAllAsync()).
+                Where(t => int.Parse(client.AccountNumber) == t.BankAccountIdReceiver ||
+                t.BankAccountIdSender == int.Parse(client.AccountNumber)).OrderByDescending(o => o.TransactionDate).ToList();
+
+            var model = new Models.ViewModels.Consultant.TransactionsViewModel
+            {
                 Transactions = transactions,
                 AppUser = user,
                 Client = client
@@ -163,7 +253,7 @@ namespace _2024FinalYearProject.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Reverse(int Id , string userId)
+        public async Task<IActionResult> Reverse(int Id, string userId)
         {
             var username = User.Identity.Name;
 
@@ -186,7 +276,7 @@ namespace _2024FinalYearProject.Controllers
                 await wrapper.BankAccount.UpdateAsync(accountSender);
             }
 
-           
+
 
             var transaction1 = new Transaction()
             {
@@ -199,7 +289,7 @@ namespace _2024FinalYearProject.Controllers
 
             };
             await wrapper.Transaction.AddAsync(transaction1);
-            return RedirectToAction("Transactions",person.Id);
+            return RedirectToAction("Transactions", person.Id);
 
         }
 
@@ -207,7 +297,7 @@ namespace _2024FinalYearProject.Controllers
         public async Task<IActionResult> Account(string Id)
         {
             var user = await userManager.FindByIdAsync(Id);
-            
+
             var model = new UpdateViewModel()
             {
                 UserRole = user.UserRole,
@@ -218,7 +308,7 @@ namespace _2024FinalYearProject.Controllers
                 IdNumber = user.IDnumber,
                 FirstName = user.FirstName,
                 AppUserId = user.Id
-                
+
             };
 
             return View(model);
@@ -237,11 +327,11 @@ namespace _2024FinalYearProject.Controllers
             model.PhoneNumber = user.PhoneNumber;
             model.IDnumber = user.IdNumber;
             model.FirstName = user.FirstName;
-           var result = await userManager.UpdateAsync(model);
+            var result = await userManager.UpdateAsync(model);
             if (result.Succeeded)
             {
                 Notification notification = new Notification()
-{
+                {
                     UserEmail = model.Email,
                     NotificationDate = DateTime.Now,
                     Message = "Your account has been updated successfully by admin"

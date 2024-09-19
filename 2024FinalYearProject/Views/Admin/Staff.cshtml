@@ -1,8 +1,8 @@
-﻿@using _2024FinalYearProject.Models.ViewModels.FinacialAdvisor
-@model UsersPageViewModel
+﻿@using _2024FinalYearProject.Models.ViewModels.Admin
+@model StaffViewModel
 
 @{
-    ViewBag.Title = "Financial Advise Users Page";
+    ViewBag.Title = "Admin Staff-Page";
 }
 
 <style>
@@ -66,34 +66,38 @@
         <div class="col-2 bg-light sidebar">
             <div class="d-flex align-items-center py-3">
                 <i class="fas fa-circle me-2 text-success"></i>
-                <h4 class="m-0">Consultant</h4>
+                <h4 class="m-0">Consult</h4>
             </div>
             <ul class="nav flex-column">
                 <li class="nav-item">
-                    <a class="nav-link" asp-action="Index"><i class="fa-duotone fa-solid fa-table-columns"></i> Dashboard</a>
+                    <a class="nav-link" asp-action="Staff"><i class="fas fa-chart-line me-2"></i> Manage-Staff</a>
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link active" asp-action="Users"> <i class="fa-solid fa-users"></i> Users</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" asp-action="Reviews"><i class="fa-solid fa-star"></i> Reviews</a>
+                    <a class="nav-link" asp-action="Account"><i class="fas fa-chart-line me-2"></i> Manage Profile</a>
                 </li>
 
+                <li class="nav-item">
+                    <a class="nav-link" asp-action="Wallet"><i class="fas fa-wallet me-2"></i> My Wallet</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="#"><i class="fas fa-exchange-alt me-2"></i> Transactions</a>
+                </li>
             </ul>
         </div>
         <div class="col-10 p-4">
-            
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <div>
-                    <h4>Hello, @Model.User.FirstName</h4>
-                    <p>You can select user and  manage here</p>
+                    <h4>Hello, Admin</h4>
+                    <p>You can manage your consultants and financial advisors here here</p>
                 </div>
 
             </div>
 
-            <a class="btn btn-primary" asp-action="UsersReport">Generate Report</a>
-
+            <div>
+                <a class="btn btn-primary" asp-action="AddStaff" >Add Consultant/Financial Advisor</a>
+            </div>
             <div class="row">
                 <div class="col-12">
                     <table class="table table-striped">
@@ -101,14 +105,13 @@
                             <tr class="highlight">
                                 <th scope="col">#</th>
                                 <th scope="col">Name</th>
-                                <th scope="col">Amount</th>
-                                <th scope="col">MoneyIn</th>
-                                <th scope="col">MoneyOut</th>
+                                <th scope="col">Surname</th>
+                                <th scope="col">Role</th>
                                 <th scope="col">Manage</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @if (Model.Users.Count() == 0)
+                            @if (Model.users.Count() == 0)
                             {
                                 <tr>
                                     <td colspan="6" class="text-center">
@@ -116,18 +119,17 @@
                                     </td>
                                 </tr>
                             }
-                            @foreach (var user in Model.Users)
+                            @foreach (var user in Model.users)
                             {
                                 <tr>
                                     <th scope="row">1</th>
-                                    <td>@user.AppUser.UserName</td>
-                                    <td>R @user.BankAccount.Balance.ToString("0.00")</td>
-                                    <td>R @user.MoneyIn.ToString("0.00")</td>
-                                    <td>R @user.MoneyOut.ToString("0.00")</td>
+                                    <td>@user.FirstName</td>
+                                    <td>R @user.LastName</td>
+                                    <td>R @user.UserRole</td>
                                     <td>
                                         <div class="d-inline-block">
                                             <form method="post" asp-action="UserLogins">
-                                                <input type="hidden" name="Id" value="@user.AppUser.Id">
+                                                <input type="hidden" name="Id" value="@user.Id">
                                                 <button type="submit" class="btn btn-primary btn-sm">
                                                     <i class="fa fa-sign-in" aria-hidden="true"></i>
                                                 </button>
@@ -136,7 +138,7 @@
 
                                         <div class="d-inline-block">
                                             <form method="get" asp-action="Account">
-                                                <input type="hidden" name="Id" value="@user.AppUser.Id">
+                                                <input type="hidden" name="Id" value="@user.Id">
                                                 <button type="submit" class="btn btn-primary btn-sm">
                                                     <i class="fa-solid fa-user"></i>
                                                 </button>
@@ -145,7 +147,7 @@
 
                                         <div class="d-inline-block">
                                             <form method="get" asp-action="Password">
-                                                <input type="hidden" name="Id" value="@user.AppUser.Id">
+                                                <input type="hidden" name="Id" value="@user.Id">
                                                 <button type="submit" class="btn btn-primary btn-sm">
                                                     <i class="fa-solid fa-lock"></i>
                                                 </button>
@@ -153,7 +155,7 @@
                                         </div>
                                         <div class="d-inline-block">
                                             <form method="get" asp-action="Transactions">
-                                                <input type="hidden" name="Id" value="@user.AppUser.Id">
+                                                <input type="hidden" name="Id" value="@user.Id">
                                                 <button type="submit" class="btn btn-primary btn-sm">
                                                     <i class="fa-solid fa-money-bill-transfer"></i>
                                                 </button>

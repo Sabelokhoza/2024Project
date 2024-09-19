@@ -15,6 +15,7 @@ namespace _2024FinalYearProject.Data
         public DbSet<FeedBack> FeedBacks { get; set; }
         public DbSet<LoginSessions> LoginSessions { get; set; }
         public DbSet<Advice>Advices { get; set; }
+        public DbSet<Report> Reports { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);

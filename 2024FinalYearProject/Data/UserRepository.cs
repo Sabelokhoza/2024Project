@@ -66,6 +66,18 @@ namespace _2024FinalYearProject.Data
                                   }).ToListAsync();
         }
 
+        public async Task<List<AppUser>> GetStaffMembers()
+        {
+            return await (from user in _context.Users
+                          join userRole in _context.UserRoles
+                          on user.Id equals userRole.UserId
+                          join role in _context.Roles
+                          on userRole.RoleId equals role.Id
+                          where role.Name == "Consultant" || role.Name == "Advisor"
+                          select user).ToListAsync();
+        }
+
+
         public async Task<UserLogInsViewModel> GetUserLogins(string email)
         {
             var userLogins = await _context.LoginSessions.Where(x => x.UserEmail == email)

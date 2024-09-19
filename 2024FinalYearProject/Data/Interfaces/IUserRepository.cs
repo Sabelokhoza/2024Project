@@ -13,5 +13,6 @@ namespace _2024FinalYearProject.Data.Interfaces
         Task<List<UserAdvisorViewModel>> GetAllUsersAndBankDetails();
         Task<AdviceViewModel> GetAdviceInformation(string userId);
         Task<List<Transaction>> GetUserTransactions(string accountNumber);
+        Task<List<AppUser>> GetStaffMembers();
     }
 }

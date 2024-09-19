@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Identity;
 using _2024FinalYearProject.Models;
 using _2024FinalYearProject.Models.ViewModels.Admin;
 using _2024FinalYearProject.Models.ViewModels;
+using System.Data;
+using _2024FinalYearProject.Models.ViewModels.Client;
 
 namespace _2024FinalYearProject.Controllers
 {
@@ -37,6 +39,88 @@ namespace _2024FinalYearProject.Controllers
             };
 
             return View(indexPageViewModel);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Advice()
+        {
+             var advices = await _wrapper.Advice.GetAdvices();
+
+            return View(advices);
+        }
+
+
+        [HttpGet]
+        public async Task<IActionResult> AddStaff()
+        {
+            return View();
+        }
+
+        public async Task<IActionResult> AddStaff(RegisterViewModel registerModel)
+        {
+            if (ModelState.IsValid)
+            {
+                AppUser user = new()
+                {
+                    UserName = (registerModel.LastName + "-" + registerModel.FirstName[0]),
+                    IDnumber = registerModel.IdPassportNumber,
+                    Email = registerModel.EmailAddress,
+                    FirstName = registerModel.FirstName,
+                    LastName = registerModel.LastName,
+                    StudentStaffNumber = registerModel.StudentStaffNumber,
+                    UserRole = registerModel.RegisterAs
+                };
+
+                Random rndAccount = new Random();
+                string _randomAccount = string.Empty;
+                do
+                {
+                    _randomAccount = rndAccount.Next(99999999, 999999999).ToString();
+                }
+                while (_userManager.Users.Where(u => u.AccountNumber != _randomAccount).FirstOrDefault() == null);
+                user.AccountNumber = _randomAccount;
+
+
+
+                IdentityResult result = await _userManager.CreateAsync(user, registerModel.Password);
+                if (result.Succeeded)
+                {
+                    await _userManager.AddToRoleAsync(user, user.UserRole);
+                    BankAccount bankAccountMain = new()
+                    {
+                        AccountNumber = _randomAccount,
+                        Balance = 600m,
+                        BankAccountType = "Main",
+                        UserEmail = user.Email,
+                    };
+                    await _wrapper.BankAccount.AddAsync(bankAccountMain);
+
+                        Notification notification = new Notification();
+                        notification.UserEmail = user.Email;
+                        notification.NotificationDate = DateTime.Now;
+                        notification.Message = "Welcome to UniBank , you have been added by admin as a "+ user.UserRole ;
+
+                        await _wrapper.Notification.AddAsync(notification);
+
+                        return RedirectToAction("Staff");
+                    }
+                }
+            return View(registerModel);
+        }
+
+
+        [HttpGet]
+        public async Task<IActionResult> Staff()
+        {
+
+
+            var users = await _wrapper.AppUser.GetStaffMembers();
+            var model = new StaffViewModel()
+            {
+                users = users,
+            };
+
+            return View(model);
         }
 
         [HttpGet]

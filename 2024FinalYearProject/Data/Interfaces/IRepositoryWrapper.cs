@@ -9,6 +9,8 @@
         ILoginRepository Logins { get; }
         INotificationRepository Notification { get; }
         IUserRepository AppUser { get; }
+        IAdviceRepository Advice { get; }
+        IReportRepository report { get; }
         void SaveChanges();
     }
 }

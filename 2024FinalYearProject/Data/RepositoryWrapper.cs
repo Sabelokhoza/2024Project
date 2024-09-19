@@ -13,9 +13,24 @@ namespace _2024FinalYearProject.Data
         private IBankAccountRepository _bankAccount;
         private IUserRepository _appUser;
         private ILoginRepository _logins;
+        private IAdviceRepository _advice;
+        private IReportRepository _report;
         public RepositoryWrapper(AppDbContext appDbContext)
         {
             _appDbContext = appDbContext;
+        }
+
+        public IAdviceRepository Advice
+        {
+            get
+            {
+                if (_advice == null)
+                {
+                    _advice = new AdviceRepository(_appDbContext);
+                }
+
+                return _advice;
+            }
         }
 
         public IBankAccountRepository BankAccount
@@ -28,6 +43,19 @@ namespace _2024FinalYearProject.Data
                 }
 
                 return _bankAccount;
+            }
+        }
+
+        public IReportRepository report
+        {
+            get
+            {
+                if (_report == null)
+                {
+                    _report = new ReportRepository(_appDbContext);
+                }
+
+                return _report;
             }
         }
 
