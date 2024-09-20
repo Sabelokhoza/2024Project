@@ -96,8 +96,13 @@
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link active" asp-action="Users"> <i class="fa-solid fa-users"></i> Users</a>
+                    <a class="nav-link active" asp-action="Staff" ><i class="fas fa-solid fa-users me-2"></i> Manage-Staff</a>
                 </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" asp-action="Users"> <i class="fa-solid fa-users"></i> Users</a>
+                </li>
+
                 <li class="nav-item">
                     <a class="nav-link" asp-action="Reviews"><i class="fa-solid fa-star"></i> Reviews</a>
                 </li>
@@ -123,8 +128,8 @@
                         <small class="text-muted">You can add consultant or financial advisor below.</small> <br />
 
                         <div class="mb-3">
-                            <label asp-for="StudentStaffNumber" class="form-label"></label>
-                            <input asp-for="StudentStaffNumber" class="form-control" />
+                            <label asp-for="StudentStaffNumber"  class="form-label"></label>
+                            <input asp-for="StudentStaffNumber" type="number" class="form-control" />
                         </div>
 
                         <div class="mb-3">
@@ -141,7 +146,7 @@
                         </div>
                         <div class="mb-3">
                             <label asp-for="IdPassportNumber" class="form-label"></label>
-                            <input asp-for="IdPassportNumber" class="form-control" />
+                            <input asp-for="IdPassportNumber" type="number" class="form-control" />
                         </div>
 
                         <div class="mb-3">
@@ -155,13 +160,14 @@
                         <div class="mb-3">
                             <label asp-for="Password" class="form-label">Password</label>
                             <input asp-for="Password" class="form-control" autocomplete="off" />
-                            <span asp-validation-for="Password" class="text-danger"></span>
+                           
                         </div>
 
                         <div class="mb-3">
+                           
                             <label asp-for="ConfirmPassword" class="form-label">Confirm Password</label>
                             <input asp-for="ConfirmPassword" class="form-control" autocomplete="off" />
-                            <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                            
                         </div>
 
 

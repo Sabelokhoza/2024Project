@@ -1,4 +1,4 @@
-﻿@model TransactionViewModel
+﻿@model UserLogInsViewModel
 
 @{
     ViewBag.Title = "User Account Page";
@@ -14,7 +14,7 @@
     }
 
     i {
-        color: #007bff;
+        color: #ff7700;
     }
 
     .sidebar h4 {
@@ -73,85 +73,53 @@
             </div>
             <ul class="nav flex-column">
                 <li class="nav-item">
-                    <a class="nav-link" asp-action="Wallet"><i class="fas fa-wallet me-2"></i> My Wallet</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" asp-action="UserLogins"><i class="fas fa-chart-line me-2"></i> Log-ins</a>
+                    <a class="nav-link" asp-action="Index"><i class="fa-duotone fa-solid fa-table-columns"></i> Dashboard</a>
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link" asp-action="Account"><i class="fa-solid fa-user"></i>Manage Profile</a>
-                </li>
-
-                <li class="nav-item">
-                    <a class="nav-link active" asp-action="Transactions"><i class="fas fa-exchange-alt me-2"></i> Transactions</a>
+                    <a class="nav-link active" asp-action="Users"> <i class="fa-solid fa-users"></i> Users</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" asp-action="Messages"><i class="fas fa-envelope me-2"></i> Messages</a>
+                    <a class="nav-link" asp-action="Reviews"><i class="fa-solid fa-star"></i> Reviews</a>
                 </li>
-
             </ul>
         </div>
         <div class="col-10 p-4">
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <div>
                     <h4>Hello, @Model.AppUser.FirstName</h4>
-                    <p>Here’s your logins summary</p>
+                    <p>Here’s the user's login summary</p>
                 </div>
 
             </div>
            
             <div class="card">
                 <div class="card-body">
-                    <h5 class="card-title">Money Flow</h5>
-                    <p>Income vs. Expenses (Transactions)</p>
+                    <h5 class="card-title">User Logins</h5>
                     <div class="row">
                         <div class="col-12">
                             <table class="table table-striped">
                                 <thead>
                                     <tr class="highlight">
                                         <th scope="col">#</th>
-                                        <th scope="col">From</th>
-                                        <th scope="col">To</th>
-                                        <th scope="col">Amount</th>
-                                        <th scope="col">Transaction-Type</th>
+                                        <th scope="col">Date-Time</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @if (Model.Transactions.Count() == 0)
+                                    @if (Model.LoginSessions.Count() == 0)
                                     {
                                         <tr>
                                             <td colspan="6" class="text-center text-danger">
-                                                <i class="fas fa-exclamation-triangle red-icon "></i> No Transactions
+                                                <i class="fas fa-exclamation-triangle red-icon "></i> No login sessions
                                             </td>
                                         </tr>
                                     }
-                                    @foreach (var transaction in Model.Transactions)
+                                    @foreach (var transaction in Model.LoginSessions)
                                     {
                                         <tr>
                                             <th scope="row">1</th>
-                                            <td>
-                                                @if (transaction.BankAccountIdSender == 0)
-                                                {
-                                                    @Model.None
-                                                }
-                                                else
-                                                {
-                                                    @transaction.BankAccountIdSender
-                                                }
-                                            </td>
-                                            <td>
-                                                @if (transaction.BankAccountIdReceiver == 0)
-                                                {
-                                                    @Model.None
-                                                }
-                                                else
-                                                {
-                                                    @transaction.BankAccountIdReceiver
-                                                }
-                                            </td>
-                                            <td>R @transaction.Amount.ToString("0.00")</td>
-                                            <td>@transaction.TrandactionType</td>
+                                            <td>@transaction.TimeStamp</td>
+                                            
                                         </tr>
                                     }
                                 </tbody>
@@ -160,7 +128,6 @@
                     </div>
                 </div>
             </div>
-
         </div>
     </div>
 </div>

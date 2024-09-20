@@ -478,57 +478,7 @@ namespace _2024FinalYearProject.Controllers
             return View();
         }
 
-        //[HttpPost]
-        //public async Task<IActionResult> ConsultantUpdateUser(ConsultantUpdateUserModel model)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        var user = await userManager.FindByEmailAsync(model.Email);
-        //        if (user != null)
-        //        {
-        //            user.Email = model.Email;
-        //            user.PhoneNumber = model.PhoneNumber;
-        //            user.LastName = model.Lastname;
-        //            user.DateOfBirth = model.DateOfBirth;
-        //            var result = await userManager.UpdateAsync(user);
-        //            Message = "Updated User Details\n";
-        //            if (result.Succeeded)
-        //            {
-        //                if (model.Password != null && model.ConfirmPassword != null && model.Password == model.ConfirmPassword)
-        //                {
-        //                    var passResults = await userManager.RemovePasswordAsync(user);
-        //                    if (passResults.Succeeded)
-        //                    {
-        //                        if ((await userManager.AddPasswordAsync(user, model.Password)).Succeeded)
-        //                        {
-        //                            Message += "Successfully updated password";
-        //                        }
-        //                        else
-        //                        {
-        //                            Message += "Error updating password...Skipping process";
-        //                        }
-        //                    }
-        //                }
-        //                return RedirectToAction("Index", "Consultant");
-        //            }
-        //            else
-        //            {
-        //                foreach (var error in result.Errors)
-        //                {
-        //                    ModelState.AddModelError("", error.Description);
-        //                }
-        //            }
-        //        }
-        //        else
-        //        {
-        //            ModelState.AddModelError("", "Could not find user, please contact system admin");
-        //            Message = "Could not find user, please contact system admin";
-        //            return View(model);
-        //        }
-        //    }
-        //    return View(model);
-        //}
-
+        
 
         [HttpGet]
         public async Task<IActionResult> GenerateReport()

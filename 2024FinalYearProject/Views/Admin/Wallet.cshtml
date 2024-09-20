@@ -1,6 +1,5 @@
 ﻿@model ClientIndexViewModel
 
-
 @{
     ViewBag.Title = "My Wallet";
 }
@@ -112,38 +111,35 @@
     }
 </style>
 
-
 <div class="container-fluid">
     <div class="row">
-        <div class="col-2 bg-light sidebar">
+        <!-- Left Navigation -->
+        <div class="col-2 sidebar">
             <div class="d-flex align-items-center py-3">
                 <i class="fas fa-circle me-2 text-success"></i>
-                <h4 class="m-0">Account</h4>
+                <h4 class="m-0">Admin</h4>
             </div>
             <ul class="nav flex-column">
                 <li class="nav-item">
-                    <a class="nav-link active" asp-action="Wallet"><i class="fas fa-wallet me-2"></i> My Wallet</a>
+                    <a class="nav-link" asp-action="Index"><i class="fas fa-table-columns"></i> Dashboard</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" asp-action="UserLogins"><i class="fas fa-chart-line me-2"></i> Log-ins</a>
-                </li>
-
-                <li class="nav-item">
-                    <a class="nav-link" asp-action="Account"><i class="fa-solid fa-user"></i>Manage Profile</a>
-                </li>
-
-                <li class="nav-item">
-                    <a class="nav-link" asp-action="Transactions"><i class="fas fa-exchange-alt me-2"></i> Transactions</a>
+                    <a class="nav-link" asp-action="Staff"><i class="fas fa-users"></i> Manage-Staff</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" asp-action="Messages"><i class="fas fa-envelope me-2"></i> Messages</a>
+                    <a class="nav-link active" asp-action="Users"><i class="fas fa-users"></i> Users</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" asp-action="Reviews"><i class="fas fa-star"></i> Reviews</a>
                 </li>
             </ul>
         </div>
+
+        <!-- Main Content -->
         <div class="col-10 main-content">
             <div class="mb-4">
-                <h2 class="fw-bold">Hello,  @Model.user.FirstName</h2>
-                <p class="text-muted">You can manage your account here</p>
+                <h2 class="fw-bold">Hello, Admin</h2>
+                <p class="text-muted">You can manage @Model.user.FirstName's account information</p>
             </div>
 
             <div class="card account-card mb-4">
@@ -165,6 +161,7 @@
                 <h5 class="mb-3">Transfer</h5>
                 <form method="post" action="Transfer" class="row g-3 align-items-center" id="depositForm">
                     <div id="error-message" class="text-danger mt-2"></div>
+                    <input type="hidden" name="Id" value="@Model.user.Id" id="Id">
                     <div class="col-md-4">
                         <input type="number" name="accountNo" class="form-control" id="accountNo" placeholder="Account No.">
                     </div>
@@ -188,6 +185,7 @@
                             <form method="post" action="Deposit" class="mt-3" id="depositForm">
                                 <div id="error-message" class="text-danger mt-2"></div>
                                 <div class="input-group mb-3">
+                                    <input type="hidden" name="Id" value="@Model.user.Id" id="Id">
                                     <input type="number" name="amount" class="form-control" id="depositAmount" placeholder="Deposit">
                                     <button type="submit" class="btn btn-custom btn-deposit" onclick="onDeposit()">Deposit</button>
                                 </div>
@@ -205,6 +203,7 @@
                             <form method="post" action="Withdraw" class="mt-3" id="withdrawForm">
                                 <div id="error-message" class="text-danger mt-2"></div>
                                 <div class="input-group mb-3">
+                                    <input type="hidden" name="Id" value="@Model.user.Id" id="Id">
                                     <input type="number" name="amount" class="form-control" id="withdrawAmount" placeholder="Withdraw">
                                     <button type="submit" class="btn btn-custom btn-withdraw" onclick="onWithdraw('@Model.bankAccount.Balance')">Withdraw</button>
                                 </div>
@@ -212,10 +211,10 @@
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
     </div>
 </div>
-
-
 
 
 @section Scripts {

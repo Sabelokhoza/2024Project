@@ -163,11 +163,11 @@ namespace _2024FinalYearProject.Controllers
                 Notification notification = new Notification();
                 notification.UserEmail = user.Email;
                 notification.NotificationDate = DateTime.Now;
-                notification.Message = "You have withdrawn R" + amount + " from your account on " + DateTime.Now;
+                notification.Message = "Withdrawal of R" + amount + " from your account on " + DateTime.Now + " has been made by the admin on your behalf";
 
                 await _repo.Notification.AddAsync(notification);
             }
-            return RedirectToAction("Wallet");
+            return RedirectToAction("FeedBack");
 
         }
 
@@ -195,12 +195,12 @@ namespace _2024FinalYearProject.Controllers
                 Notification notification = new Notification();
                 notification.UserEmail = user.Email;
                 notification.NotificationDate = DateTime.Now;
-                notification.Message = "You have deposited R" + amount + " to your account on " + DateTime.Now;
+                notification.Message = "Deposit of R" + amount + " to your account on " + DateTime.Now +" has been made by the admin on your behalf";
 
                 await _repo.Notification.AddAsync(notification);
             }
 
-            return RedirectToAction("Wallet");
+            return RedirectToAction("FeedBack");
         }
 
         [HttpPost]
@@ -235,14 +235,34 @@ namespace _2024FinalYearProject.Controllers
                 Notification notification = new Notification();
                 notification.UserEmail = user.Email;
                 notification.NotificationDate = DateTime.Now;
-                notification.Message = "You have transerred R" + amount + " to bank account number :" + bankAccount.AccountNumber + " on " + DateTime.Now;
+                notification.Message = "Transfer of R" + amount + " to bank account number :" + bankAccount.AccountNumber + " on " + DateTime.Now +"has been made by admin on your behalf";
 
                 await _repo.Notification.AddAsync(notification);
             }
 
-            return RedirectToAction("Wallet");
+            return RedirectToAction("FeedBack");
+        }
+        [HttpGet]
+        public async Task<IActionResult> FeedBack()
+        {
+            return View();
         }
 
+        [HttpPost]
+        public async Task<IActionResult> FeedBack(FeedBack _feedback)
+        {
+            var user = await _userManager.GetUserAsync(User);
+
+            _feedback.dateTime = DateTime.Now;
+            _feedback.UserEmail = user.Email;
+
+            if (ModelState.IsValid)
+            {
+                await _repo.Review.AddAsync(_feedback);
+            }
+            return RedirectToAction("Wallet");
+
+        }
 
 
     }

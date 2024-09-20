@@ -101,6 +101,7 @@ namespace _2024FinalYearProject.Data
             var result = await (from user in _context.Users
                          join account in _context.BankAccounts
                          on user.Email equals account.UserEmail
+                         where user.UserRole == "Student" || user.UserRole == "Staff"
                          select new UserAdvisorViewModel
                          {
                              MoneyOut = _context.Transactions.Where(x => x.BankAccountIdSender.ToString() == account.AccountNumber).Sum(x => x.Amount),
