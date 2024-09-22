@@ -73,7 +73,7 @@ namespace _2024FinalYearProject.Controllers
                     BankAccount bankAccountMain = new()
                     {
                         AccountNumber = _randomAccount,
-                        Balance = 600m,
+                        Balance = 150m,
                         BankAccountType = "Main",
                         UserEmail = user.Email,
                     };
@@ -107,7 +107,14 @@ namespace _2024FinalYearProject.Controllers
 
                         await wrapper.Notification.AddAsync(notification);
 
-                        return RedirectToAction("Index", "Client");
+                        Notification notification1 = new Notification();
+                        notification1.UserEmail = user.Email;
+                        notification1.NotificationDate = DateTime.Now;
+                        notification1.Message = "Welcome to UniBank , you have recieved R150 siging fee";
+
+                        await wrapper.Notification.AddAsync(notification);
+
+                        return RedirectToAction("Wallet", "Client");
                     }
                 }
                 else
