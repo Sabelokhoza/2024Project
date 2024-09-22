@@ -80,7 +80,7 @@
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link" asp-action="Account"><i class="fa-solid fa-user"></i>Manage Profile</a>
+                    <a class="nav-link" asp-action="Account"><i class="fa-solid fa-user"></i> Manage Profile</a>
                 </li>
 
                 <li class="nav-item">
@@ -89,7 +89,6 @@
                 <li class="nav-item">
                     <a class="nav-link" asp-action="Messages"><i class="fas fa-envelope me-2"></i> Messages</a>
                 </li>
-
             </ul>
         </div>
         <div class="col-10 p-4">
@@ -100,7 +99,7 @@
                 </div>
 
             </div>
-           
+
             <div class="card">
                 <div class="card-body">
                     <h5 class="card-title">Money Flow</h5>
@@ -126,33 +125,38 @@
                                             </td>
                                         </tr>
                                     }
-                                    @foreach (var transaction in Model.Transactions)
+                                    else
                                     {
-                                        <tr>
-                                            <th scope="row">1</th>
-                                            <td>
-                                                @if (transaction.BankAccountIdSender == 0)
-                                                {
-                                                    @Model.None
-                                                }
-                                                else
-                                                {
-                                                    @transaction.BankAccountIdSender
-                                                }
-                                            </td>
-                                            <td>
-                                                @if (transaction.BankAccountIdReceiver == 0)
-                                                {
-                                                    @Model.None
-                                                }
-                                                else
-                                                {
-                                                    @transaction.BankAccountIdReceiver
-                                                }
-                                            </td>
-                                            <td>R @transaction.Amount.ToString("0.00")</td>
-                                            <td>@transaction.TrandactionType</td>
-                                        </tr>
+                                        int index = 1;
+                                        @foreach (var transaction in Model.Transactions)
+                                        {
+                                            <tr>
+                                                <th scope="row">@index</th>
+                                                <td>
+                                                    @if (transaction.BankAccountIdSender == 0)
+                                                    {
+                                                        @Model.None
+                                                    }
+                                                    else
+                                                    {
+                                                        @transaction.BankAccountIdSender
+                                                    }
+                                                </td>
+                                                <td>
+                                                    @if (transaction.BankAccountIdReceiver == 0)
+                                                    {
+                                                        @Model.None
+                                                    }
+                                                    else
+                                                    {
+                                                        @transaction.BankAccountIdReceiver
+                                                    }
+                                                </td>
+                                                <td>R @transaction.Amount.ToString("0.00")</td>
+                                                <td>@transaction.TrandactionType</td>
+                                            </tr>
+                                            index++;
+                                        }
                                     }
                                 </tbody>
                             </table>
@@ -164,4 +168,3 @@
         </div>
     </div>
 </div>
-

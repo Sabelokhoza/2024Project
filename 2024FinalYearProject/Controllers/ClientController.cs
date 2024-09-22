@@ -82,15 +82,14 @@ namespace _2024FinalYearProject.Controllers
                 UserRole = user.UserRole,
                 Email = user.Email,
                 LastName = user.LastName,
-                DateOfBirth = user.DateOfBirth,
                 PhoneNumber = user.PhoneNumber,
                 IdNumber = user.IDnumber,
                 FirstName = user.FirstName,
-                AppUserId = user.Id
+                AppUserId = user.Id , 
+                StudentStaffNumber = user.StudentStaffNumber
             };
 
             return View(model);
-
         }
 
         [HttpPost]
@@ -106,13 +105,13 @@ namespace _2024FinalYearProject.Controllers
             model.UserRole = user.UserRole;
             model.Email = user.Email;
             model.LastName = user.LastName;
-            model.DateOfBirth = user.DateOfBirth;
             model.PhoneNumber = user.PhoneNumber;
             model.IDnumber = user.IdNumber;
             model.FirstName = user.FirstName;
+            model.StudentStaffNumber = user.StudentStaffNumber;
             await _repo.AppUser.UpdateAsync(model);
 
-            return View(user);
+            return RedirectToAction("Wallet");
 
         }
 
@@ -163,11 +162,12 @@ namespace _2024FinalYearProject.Controllers
                 Notification notification = new Notification();
                 notification.UserEmail = user.Email;
                 notification.NotificationDate = DateTime.Now;
-                notification.Message = "Withdrawal of R" + amount + " from your account on " + DateTime.Now + " has been made by the admin on your behalf";
+                notification.Message = "Withdrawed R" + amount + " from your account on " + DateTime.Now;
 
                 await _repo.Notification.AddAsync(notification);
+                return RedirectToAction("FeedBack");
             }
-            return RedirectToAction("FeedBack");
+            return RedirectToAction("Wallet");
 
         }
 
@@ -195,12 +195,13 @@ namespace _2024FinalYearProject.Controllers
                 Notification notification = new Notification();
                 notification.UserEmail = user.Email;
                 notification.NotificationDate = DateTime.Now;
-                notification.Message = "Deposit of R" + amount + " to your account on " + DateTime.Now +" has been made by the admin on your behalf";
+                notification.Message = "Deposited of R" + amount + " to your account on " + DateTime.Now ;
 
                 await _repo.Notification.AddAsync(notification);
+                return RedirectToAction("FeedBack");
             }
 
-            return RedirectToAction("FeedBack");
+            return RedirectToAction("Wallet");
         }
 
         [HttpPost]
@@ -235,12 +236,13 @@ namespace _2024FinalYearProject.Controllers
                 Notification notification = new Notification();
                 notification.UserEmail = user.Email;
                 notification.NotificationDate = DateTime.Now;
-                notification.Message = "Transfer of R" + amount + " to bank account number :" + bankAccount.AccountNumber + " on " + DateTime.Now +"has been made by admin on your behalf";
+                notification.Message = "Transferred R" + amount + " to bank account number :" + bankAccount.AccountNumber + " on " + DateTime.Now ;
 
                 await _repo.Notification.AddAsync(notification);
+                return RedirectToAction("FeedBack");
             }
 
-            return RedirectToAction("FeedBack");
+            return RedirectToAction("Wallet");
         }
         [HttpGet]
         public async Task<IActionResult> FeedBack()

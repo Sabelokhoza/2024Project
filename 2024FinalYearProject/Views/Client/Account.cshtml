@@ -93,14 +93,14 @@
             </div>
             <ul class="nav flex-column">
                 <li class="nav-item">
-                    <a class="nav-link active" asp-action="Wallet"><i class="fas fa-wallet me-2"></i> My Wallet</a>
+                    <a class="nav-link" asp-action="Wallet"><i class="fas fa-wallet me-2"></i> My Wallet</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" asp-action="UserLogins"><i class="fas fa-chart-line me-2"></i> Log-ins</a>
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link" asp-action="Account"><i class="fa-solid fa-user"></i>Manage Profile</a>
+                    <a class="nav-link active" asp-action="Account"><i class="fa-solid fa-user"></i> Manage Profile</a>
                 </li>
 
                 <li class="nav-item">
@@ -152,15 +152,6 @@
                             <label asp-for="PhoneNumber" class="form-label"></label>
                             <input asp-for="PhoneNumber" class="form-control" />
                         </div>
-
-                           <div class="mb-3">
-                            <label asp-for="DateOfBirth" class="form-label"></label>
-                            <input asp-for="DateOfBirth" class="form-control" />
-                        </div>
-
-
-
-
                         <div class="mb-3">
                             <label asp-for="StudentStaffNumber" class="form-label"></label>
                             <input asp-for="StudentStaffNumber" class="form-control" />
@@ -172,8 +163,8 @@
                         </div>
 
                         <button type="submit" class="btn btn-primary">Update</button>
-                        <a asp-action="ResetPassword" asp-controller="Account" class="btn btn-secondary">Reset Password</a>
-                        <a asp-action="Index" asp-controller="Home" class="btn btn-secondary">Cancel</a>
+                       
+                        <a asp-action="Wallet" class="btn btn-secondary">Cancel</a>
                     </form>
 
                 </section>
