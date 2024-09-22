@@ -78,14 +78,7 @@ namespace _2024FinalYearProject.Controllers
                         UserEmail = user.Email,
                     };
                     await wrapper.BankAccount.AddAsync(bankAccountMain);
-                    Transaction transaction = new()
-                    {
-                        BankAccountIdReceiver = int.Parse(_randomAccount),
-                        Amount = 600m,
-                        Reference = "fee Open new account ",
-                        UserEmail = user.Email,
-                    };
-                    await wrapper.Transaction.AddAsync(transaction);
+                  
                     var signin_result = await signInManager.PasswordSignInAsync(user, registerModel.Password,
                         isPersistent: false, lockoutOnFailure: false);
                     if (signin_result.Succeeded)
@@ -97,6 +90,15 @@ namespace _2024FinalYearProject.Controllers
                         };
                         await wrapper.Logins.AddAsync(newLogin);
                         wrapper.SaveChanges();
+
+                        Transaction transaction = new()
+                        {
+                            BankAccountIdReceiver = int.Parse(_randomAccount),
+                            Amount = 150m,
+                            TrandactionType = "Signing fee",
+                            UserEmail = user.Email,
+                        };
+                        await wrapper.Transaction.AddAsync(transaction);
 
                         Notification notification = new Notification();
                         notification.UserEmail = user.Email;

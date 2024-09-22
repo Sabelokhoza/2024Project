@@ -29,6 +29,7 @@ namespace _2024FinalYearProject.Controllers
         [TempData]
         public string Message { get; set; }
 
+
         [AllowAnonymous]
         [HttpGet]
         public async Task<IActionResult> Password(string Id)
@@ -56,7 +57,7 @@ namespace _2024FinalYearProject.Controllers
             };
             if (ModelState.IsValid)
             {
-                if (Password != ConfirmPassword || Password == string.Empty || ConfirmPassword == string.Empty)
+                if (Password != ConfirmPassword || string.IsNullOrEmpty(ConfirmPassword) || string.IsNullOrEmpty(Password))
                 {
                     ModelState.AddModelError("", "Password and Confirm Password must match");
 

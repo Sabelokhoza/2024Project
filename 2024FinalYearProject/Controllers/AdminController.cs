@@ -377,45 +377,6 @@ namespace _2024FinalYearProject.Controllers
             return View(model);
         }
 
-        [HttpPost]
-        public IActionResult ChangePassword()
-        {
-            return View();
-        }
-
-        public async Task<IActionResult> ConsultantDeleteUser(string email)
-        {
-            var user = await _userManager.FindByEmailAsync(email);
-            if (user != null)
-            {
-                var results = await _userManager.DeleteAsync(user);
-                if (results.Succeeded)
-                {
-                    return RedirectToAction("Index", "Consultant");
-                }
-                return View();
-            }
-            return View();
-        }
-        public async Task<IActionResult> ConsultantUpdateUser(string email)
-        {
-            var user = await _userManager.FindByEmailAsync(email);
-            if (user != null)
-            {
-                return View(new ConsultantUpdateUserModel
-                {
-                    AccountNumber = user.AccountNumber,
-                    DateOfBirth = user.DateOfBirth,
-                    Email = user.Email,
-                    IdNumber = user.IDnumber,
-                    LastName = user.LastName,
-                    PhoneNumber = user.PhoneNumber,
-                });
-            }
-            return View();
-        }
-
-
 
         [TempData]
         public string Message { get; set; }
