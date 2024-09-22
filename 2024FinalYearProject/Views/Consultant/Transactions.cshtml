@@ -14,7 +14,7 @@
     }
 
     i {
-        color: #ff7700;
+        color: #007bff;
     }
 
     .sidebar h4 {
@@ -118,11 +118,12 @@
                                                 <i class="fas fa-exclamation-triangle red-icon "></i> No Transactions
                                             </td>
                                         </tr>
-                                    }
+                                    }else{
+                                        int index = 1;
                                     @foreach (var transaction in Model.Transactions)
                                     {
                                         <tr>
-                                            <th scope="row">1</th>
+                                                <th scope="row">@index</th>
                                             <td>
                                                 @if (transaction.BankAccountIdSender == 0)
                                                 {
@@ -162,6 +163,8 @@
 
                                             </td>
                                         </tr>
+                                            index++;
+                                    }
                                     }
                                 </tbody>
                             </table>

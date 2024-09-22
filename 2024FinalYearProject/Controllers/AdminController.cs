@@ -44,6 +44,141 @@ namespace _2024FinalYearProject.Controllers
             return View(indexPageViewModel);
         }
 
+
+        [AllowAnonymous]
+        [HttpGet]
+        public async Task<IActionResult> Password(string Id)
+        {
+            var username = User.Identity.Name;
+
+            var user = await _userManager.FindByNameAsync(username);
+            var client = await _userManager.FindByIdAsync(Id);
+
+            PasswordResetViewModel model = new PasswordResetViewModel();
+            model.AppUser = user;
+            model.Client = client;
+
+            return View(model);
+        }
+
+        [AllowAnonymous]
+        [HttpPost]
+        public async Task<IActionResult> Password(string Id, string Password, string ConfirmPassword)
+        {
+            var model = new PasswordResetViewModel()
+            {
+                AppUser = await _userManager.FindByNameAsync(User.Identity.Name),
+                Client = await _userManager.FindByIdAsync(Id)
+            };
+            if (ModelState.IsValid)
+            {
+                if (Password != ConfirmPassword || string.IsNullOrEmpty(ConfirmPassword) || string.IsNullOrEmpty(Password))
+                {
+                    ModelState.AddModelError("", "Password and Confirm Password must match");
+
+                    return View("Password", model);
+                }
+                else
+                {
+                    var user = await _userManager.FindByIdAsync(Id);
+                    IdentityResult validPass = null;
+                    if (!string.IsNullOrEmpty(Password))
+                    {
+                        if (await _userManager.HasPasswordAsync(user))
+                        {
+                            await _userManager.RemovePasswordAsync(user);
+                        }
+
+                        validPass = await _userManager.AddPasswordAsync(user, Password);
+
+                        if (!validPass.Succeeded)
+                        {
+                            AddErrorsFromResult(validPass);
+                        }
+                    }
+
+                    if ((validPass == null)
+                          || (Password != string.Empty && validPass.Succeeded))
+                    {
+                        IdentityResult result = await _userManager.UpdateAsync(user);
+
+                        if (result.Succeeded)
+                        {
+                            Notification notification = new Notification()
+                            {
+                                UserEmail = user.Email,
+                                NotificationDate = DateTime.Now,
+                                Message = "Your password has been reset successfully by consultant"
+
+                            };
+
+                            await _wrapper.Notification.AddAsync(notification);
+                            ModelState.AddModelError("", "Password has been reset successfully");
+                            return RedirectToAction("Password", model);
+                        }
+                        else
+                        {
+                            AddErrorsFromResult(result);
+                        }
+                    }
+                }
+
+
+            }
+            return View("Password", model);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Account(string Id)
+        {
+            var user = await _userManager.FindByIdAsync(Id);
+
+            var model = new UpdateViewModel()
+            {
+                UserRole = user.UserRole,
+                Email = user.Email,
+                LastName = user.LastName,
+                PhoneNumber = user.PhoneNumber,
+                IdNumber = user.IDnumber,
+                FirstName = user.FirstName,
+                AppUserId = user.Id,
+                StudentStaffNumber = user.StudentStaffNumber
+
+            };
+
+            return View(model);
+
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Account(UpdateViewModel user)
+        {
+            var model = await _userManager.FindByIdAsync(user.AppUserId);
+
+            model.UserRole = user.UserRole;
+            model.Email = user.Email;
+            model.LastName = user.LastName;
+            model.PhoneNumber = user.PhoneNumber;
+            model.IDnumber = user.IdNumber;
+            model.FirstName = user.FirstName;
+            model.StudentStaffNumber = user.StudentStaffNumber;
+            var result = await _userManager.UpdateAsync(model);
+            if (result.Succeeded)
+            {
+                Notification notification = new Notification()
+                {
+                    UserEmail = model.Email,
+                    NotificationDate = DateTime.Now,
+                    Message = "Your account has been updated successfully by admin"
+                };
+                await _wrapper.Notification.AddAsync(notification);
+                return RedirectToAction("Users");
+            }
+
+            return View(user);
+
+        }
+
         public async Task<IActionResult> Users()
         {
             var users = await _wrapper.AppUser.GetAllUsersAndBankDetails();
@@ -285,88 +420,7 @@ namespace _2024FinalYearProject.Controllers
         [TempData]
         public string Message { get; set; }
 
-        [AllowAnonymous]
-        [HttpGet]
-        public async Task<IActionResult> Password(string Id)
-        {
-            var username = User.Identity.Name;
-
-            var user = await _userManager.FindByNameAsync(username);
-            var client = await _userManager.FindByIdAsync(Id);
-
-            PasswordResetViewModel model = new PasswordResetViewModel();
-            model.AppUser = user;
-            model.Client = client;
-
-            return View(model);
-        }
-
-        [AllowAnonymous]
-        [HttpPost]
-        public async Task<IActionResult> Password(string Id, string Password, string ConfirmPassword)
-        {
-            var model = new PasswordResetViewModel()
-            {
-                AppUser = await _userManager.FindByNameAsync(User.Identity.Name),
-                Client = await _userManager.FindByIdAsync(Id)
-            };
-            if (ModelState.IsValid)
-            {
-                if (Password != ConfirmPassword || Password == string.Empty || ConfirmPassword == string.Empty)
-                {
-                    ModelState.AddModelError("", "Password and Confirm Password must match");
-
-                    return View("Password", model);
-                }
-                else
-                {
-                    var user = await _userManager.FindByIdAsync(Id);
-                    IdentityResult validPass = null;
-                    if (!string.IsNullOrEmpty(Password))
-                    {
-                        if (await _userManager.HasPasswordAsync(user))
-                        {
-                            await _userManager.RemovePasswordAsync(user);
-                        }
-
-                        validPass = await _userManager.AddPasswordAsync(user, Password);
-
-                        if (!validPass.Succeeded)
-                        {
-                            AddErrorsFromResult(validPass);
-                        }
-                    }
-
-                    if ((validPass == null)
-                          || (Password != string.Empty && validPass.Succeeded))
-                    {
-                        IdentityResult result = await _userManager.UpdateAsync(user);
-
-                        if (result.Succeeded)
-                        {
-                            Notification notification = new Notification()
-                            {
-                                UserEmail = user.Email,
-                                NotificationDate = DateTime.Now,
-                                Message = "Your password has been reset successfully by consultant"
-
-                            };
-
-                            await _wrapper.Notification.AddAsync(notification);
-                            ModelState.AddModelError("", "Password has been reset successfully");
-                            return RedirectToAction("Password", model);
-                        }
-                        else
-                        {
-                            AddErrorsFromResult(result);
-                        }
-                    }
-                }
-
-
-            }
-            return View("Password", model);
-        }
+    
 
         public async Task<IActionResult> UserReport(string Id)
         {
@@ -545,58 +599,6 @@ namespace _2024FinalYearProject.Controllers
 
         }
 
-        [HttpGet]
-        public async Task<IActionResult> Account(string Id)
-        {
-            var user = await _userManager.FindByIdAsync(Id);
-
-            var model = new UpdateViewModel()
-            {
-                UserRole = user.UserRole,
-                Email = user.Email,
-                LastName = user.LastName,
-                DateOfBirth = user.DateOfBirth,
-                PhoneNumber = user.PhoneNumber,
-                IdNumber = user.IDnumber,
-                FirstName = user.FirstName,
-                AppUserId = user.Id
-
-            };
-
-            return View(model);
-
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> Account(UpdateViewModel user)
-        {
-            var model = await _userManager.FindByIdAsync(user.AppUserId);
-
-            model.UserRole = user.UserRole;
-            model.Email = user.Email;
-            model.LastName = user.LastName;
-            model.DateOfBirth = user.DateOfBirth;
-            model.PhoneNumber = user.PhoneNumber;
-            model.IDnumber = user.IdNumber;
-            model.FirstName = user.FirstName;
-            var result = await _userManager.UpdateAsync(model);
-            if (result.Succeeded)
-            {
-                Notification notification = new Notification()
-                {
-                    UserEmail = model.Email,
-                    NotificationDate = DateTime.Now,
-                    Message = "Your account has been updated successfully by admin"
-                };
-                await _wrapper.Notification.AddAsync(notification);
-                return RedirectToAction("Users");
-            }
-
-            return View(user);
-
-        }
-
-
         public async Task<IActionResult> ViewAllLogins(string email)
         {
             var user = await _userManager.FindByEmailAsync(email);
@@ -653,7 +655,7 @@ namespace _2024FinalYearProject.Controllers
         {
             var username = User.Identity.Name;
 
-            var user = await _userManager.FindByNameAsync(Id);
+            var user = await _userManager.FindByIdAsync(Id);
             var model = await _wrapper.AppUser.GetUserLandingPageData(user.Email);
             var bankAccount = model.bankAccount;
             if (amount > 0)

@@ -14,7 +14,7 @@
     }
 
     i {
-        color: #ff7700;
+        color: #007bff;
     }
 
     .sidebar h4 {
@@ -107,7 +107,7 @@
         <div class="col-10 p-4">
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <div>
-                    <p>You can update profile information</p>
+                    <p>You can update the client's profile information</p>
                 </div>
 
             </div>
@@ -136,7 +136,7 @@
                             <input asp-for="Email" class="form-control" />
                         </div> 
                         <div class="mb-3">
-                            <label asp-for="IdNumber" class="form-label"></label>
+                            <label asp-for="IdNumber" class="form-label">Id / Passport Number</label>
                             <input asp-for="IdNumber" class="form-control" />
                         </div>
                         <div class="mb-3">
@@ -144,16 +144,8 @@
                             <input asp-for="PhoneNumber" class="form-control" />
                         </div>
 
-                           <div class="mb-3">
-                            <label asp-for="DateOfBirth" class="form-label"></label>
-                            <input asp-for="DateOfBirth" class="form-control" />
-                        </div>
-
-
-
-
                         <div class="mb-3">
-                            <label asp-for="StudentStaffNumber" class="form-label"></label>
+                            <label asp-for="StudentStaffNumber" class="form-label">Student/Satff Number</label>
                             <input asp-for="StudentStaffNumber" class="form-control" />
                         </div>
 

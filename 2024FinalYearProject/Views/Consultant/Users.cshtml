@@ -10,6 +10,10 @@
         height: 100vh;
     }
 
+    i {
+        color: #007bff;
+    }
+
     .ImagesColor {
         color: #1a2b3c;
     }
@@ -128,7 +132,7 @@
                                         <div class="d-inline-block">
                                             <form method="post" asp-action="UserLogins">
                                                 <input type="hidden" name="Id" value="@user.AppUser.Id">
-                                                <button type="submit" class="btn btn-primary btn-sm">
+                                                <button type="submit" class="btn btn-outline-primary btn-sm">
                                                     <i class="fa fa-sign-in" aria-hidden="true"></i>
                                                 </button>
                                             </form>
@@ -137,7 +141,7 @@
                                         <div class="d-inline-block">
                                             <form method="get" asp-action="Account">
                                                 <input type="hidden" name="Id" value="@user.AppUser.Id">
-                                                <button type="submit" class="btn btn-primary btn-sm">
+                                                <button type="submit" class="btn btn-outline-primary btn-sm">
                                                     <i class="fa-solid fa-user"></i>
                                                 </button>
                                             </form>
@@ -146,7 +150,7 @@
                                         <div class="d-inline-block">
                                             <form method="get" asp-action="Password">
                                                 <input type="hidden" name="Id" value="@user.AppUser.Id">
-                                                <button type="submit" class="btn btn-primary btn-sm">
+                                                <button type="submit" class="btn  btn-outline-primary btn-sm">
                                                     <i class="fa-solid fa-lock"></i>
                                                 </button>
                                             </form>
@@ -154,7 +158,7 @@
                                         <div class="d-inline-block">
                                             <form method="get" asp-action="Transactions">
                                                 <input type="hidden" name="Id" value="@user.AppUser.Id">
-                                                <button type="submit" class="btn btn-primary btn-sm">
+                                                <button type="submit" class="btn  btn-outline-primary btn-sm">
                                                     <i class="fa-solid fa-money-bill-transfer"></i>
                                                 </button>
                                             </form>

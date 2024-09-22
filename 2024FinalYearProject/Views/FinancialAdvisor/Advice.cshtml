@@ -10,6 +10,10 @@
         height: 100vh;
     }
 
+    i {
+        color: #007bff;
+    }
+
     .ImagesColor {
         color: #1a2b3c;
     }
@@ -167,7 +171,6 @@
                                 <th scope="col"><i class="fa-solid fa-user"></i> From</th>
                                 <th scope="col"> <i class="fa-solid fa-user"></i>To</th>
                                 <th scope="col"> <i class="fa-solid fa-money-bill-trend-up"></i> Amount</th>
-                                <th scope="col"> <i class="fa-solid fa-money-bill-trend-up"></i> Manage</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -186,14 +189,6 @@
                                     <td>@transaction.BankAccountIdSender</td>
                                     <td>@transaction.BankAccountIdReceiver</td>
                                     <td>R @transaction.Amount.ToString("0.00")</td>
-                                    <td>
-                                        <button type="button" class="btn btn-primary btn-sm">
-                                            <i class="fa-solid fa-pen-to-square"></i>
-                                        </button>
-                                        <button type="button" class="btn btn-danger btn-sm" onclick="openDeleteModal('@transaction.Id', '@transaction.Amount.ToString("0.00")')">
-                                            <i class="fa-solid fa-trash"></i>
-                                        </button>
-                                    </td>
                                 </tr>
                             }
                         </tbody>

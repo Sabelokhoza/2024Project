@@ -115,25 +115,6 @@ namespace _2024FinalYearProject.Controllers
             return View(registerModel);
         }
 
-        //[HttpGet]
-        //public async Task<IActionResult> UpdateProfile()
-        //{
-        //    var username = User.Identity.Name;
-
-        //    var user = await userManager.FindByNameAsync(username);
-        //    var model = new UpdateProfileViewModel
-        //    {
-        //        Email = user.Email,
-        //        PhoneNumber = user.PhoneNumber,
-
-        //        IDNumber = user.IDnumber,
-
-        //        Userrole = user.UserRole,
-        //        Lastname = user.LastName + " " + user.FirstName,
-
-        //    };
-        //    return View(model);
-        //}
 
         [AllowAnonymous]
         public IActionResult Login(string returnUrl)
@@ -169,7 +150,7 @@ namespace _2024FinalYearProject.Controllers
 
                         if (await userManager.IsInRoleAsync(user, "User"))
                         {
-                            return RedirectToAction("Index", "Client");
+                            return RedirectToAction("Wallet", "Client");
                         }
 
 

@@ -217,6 +217,12 @@ namespace _2024FinalYearProject.Controllers
                 appUser = user
             };
             return View(model);
+        } 
+        public async Task<IActionResult> DeleteRating(int Id)
+        {
+           
+            await wrapper.Review.RemoveAsync(Id);
+            return RedirectToAction("Reviews");
         }
 
         public async Task<IActionResult> UserLogins(string Id)
@@ -303,11 +309,11 @@ namespace _2024FinalYearProject.Controllers
                 UserRole = user.UserRole,
                 Email = user.Email,
                 LastName = user.LastName,
-                DateOfBirth = user.DateOfBirth,
                 PhoneNumber = user.PhoneNumber,
                 IdNumber = user.IDnumber,
                 FirstName = user.FirstName,
-                AppUserId = user.Id
+                AppUserId = user.Id , 
+                StudentStaffNumber = user.StudentStaffNumber
 
             };
 
@@ -323,10 +329,10 @@ namespace _2024FinalYearProject.Controllers
             model.UserRole = user.UserRole;
             model.Email = user.Email;
             model.LastName = user.LastName;
-            model.DateOfBirth = user.DateOfBirth;
             model.PhoneNumber = user.PhoneNumber;
             model.IDnumber = user.IdNumber;
             model.FirstName = user.FirstName;
+            model.StudentStaffNumber = user.StudentStaffNumber;
             var result = await userManager.UpdateAsync(model);
             if (result.Succeeded)
             {
@@ -334,7 +340,7 @@ namespace _2024FinalYearProject.Controllers
                 {
                     UserEmail = model.Email,
                     NotificationDate = DateTime.Now,
-                    Message = "Your account has been updated successfully by admin"
+                    Message = "Your account has been updated successfully by consultant"
                 };
                 await wrapper.Notification.AddAsync(notification);
                 return RedirectToAction("Users");
