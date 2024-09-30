@@ -32,33 +32,47 @@ namespace _2024FinalYearProject.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Advice(string Id)
+        public async Task<IActionResult> Advice(int Id)
         {
-            var model = await _wrapper.AppUser.GetAdviceInformation(Id);
+            var advice = await _wrapper.Advice.GetByIdAsync(Id);
+            var model = await _wrapper.AppUser.GetAdviceInformation(advice.clientId);
             model.AppUser = await _userManager.FindByNameAsync(User.Identity.Name);
-
+            model.adviceId = advice.Id;
             return View("Advice", model);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Comment(string clientId, string advisorId, string comment)
+        public async Task<IActionResult> Comment(string clientId, string advisorId, int adviceId, string comment)
         {
-            var advice = new Advice()
-            {
-                clientId = clientId,
-                advisorId = advisorId,
-                AdviceText = comment
-            };
+            var advice = await _wrapper.Advice.GetByIdAsync(adviceId);
 
-            await _context.Advices.AddAsync(advice);
-            await _context.SaveChangesAsync();
-            return RedirectToAction("Index");
+            var user = await _userManager.FindByNameAsync(User.Identity.Name);
+            advice.Message = comment;
+            advice.advisorName = user.UserName;
+            advice.advisorId = user.Id;
+
+            await _wrapper.Advice.UpdateAsync(advice);
+
+            return RedirectToAction("Available");
         }
 
         public async Task<IActionResult> Index()
         {
             var user = await _userManager.FindByNameAsync(User.Identity.Name);
             return View(user);
+        }
+
+        public async Task<IActionResult> Available()
+        {
+            var advices = (await _wrapper.Advice.GetAllAsync()).Where(w => w.Message == "" &&
+            w.advisorId == null).ToList();
+
+            var user = await _userManager.FindByNameAsync(User.Identity.Name);
+            var model = new PendingAdviseModel();
+            model.PendingAdvices = advices;
+            model.User = user;
+
+            return View("Available", model);
         }
 
     }

@@ -1,8 +1,8 @@
 ﻿@using _2024FinalYearProject.Models.ViewModels.FinacialAdvisor
-@model AdviceViewModel
+@model PendingAdviseModel
 
 @{
-    ViewBag.Title = "Financial Advise Users Page";
+    ViewBag.Title = "Pending Financial Advise Users Page";
 }
 
 <style>
@@ -93,14 +93,14 @@
                 background-color: #e86600;
             }
 
-   
 
 
-        .sidebar .nav-link.active {
-            background-color: #eaf3e2;
-            color: #333;
-            font-weight: bold;
-        }
+
+    .sidebar .nav-link.active {
+        background-color: #eaf3e2;
+        color: #333;
+        font-weight: bold;
+    }
 
     .card {
         border-radius: 15px;
@@ -147,74 +147,59 @@
                 <li class="nav-item">
                     <a class="nav-link active" asp-controller="FinancialAdvisor" asp-action="Users"> <i class="fa-solid fa-users"></i> Users</a>
                 </li>
-                
+
             </ul>
         </div>
         <div class="col-10 p-4">
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <div>
-                    <h4>Hello, @Model.AppUser.FirstName</h4>
-                    <p>You can Advise @Model.Client.FirstName</p>
+                    <h4>Hello, @Model.User.FirstName</h4>
+                    <p>You can Advise offer advice here</p>
                 </div>
 
             </div>
-
-            <h3 class="fw-bold fs-4 my-3">
-                Latest Transactions
-            </h3>
+           
             <div class="row">
                 <div class="col-12">
                     <table class="table table-striped">
                         <thead>
                             <tr class="highlight">
                                 <th scope="col">#</th>
-                                <th scope="col"><i class="fa-solid fa-user"></i> From</th>
-                                <th scope="col"> <i class="fa-solid fa-user"></i>To</th>
-                                <th scope="col"> <i class="fa-solid fa-money-bill-trend-up"></i> Amount</th>
+                                <th scope="col">Name</th>
+                                <th scope="col">Amount</th>
+                                <th>Request-Date</th>
+                                <th scope="col">Action</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @if (Model.Transactions.Count() == 0)
+                            @if (Model.PendingAdvices.Count() == 0)
                             {
                                 <tr>
                                     <td colspan="6" class="text-center">
-                                        <i class="fas fa-exclamation-triangle red-icon"></i> No Transactions
+                                        <i class="fas fa-exclamation-triangle red-icon"></i> No Pending Advice Requests
                                     </td>
                                 </tr>
                             }
-                            @foreach (var transaction in Model.Transactions)
+                            @foreach (var user in Model.PendingAdvices)
                             {
                                 <tr>
                                     <th scope="row">1</th>
-                                    <td>@transaction.BankAccountIdSender</td>
-                                    <td>@transaction.BankAccountIdReceiver</td>
-                                    <td>R @transaction.Amount.ToString("0.00")</td>
+                                    <td>@user.clientName</td>
+                                    <td>R @user.Amount.ToString("0.00")</td>
+                                    <td>@user.CreatedDate</td>
+                                    <td>
+                                        <form asp-action="Advice" method="post">
+                                            <input type="hidden" name="Id" value="@user.Id" />
+                                            <button type="submit" class="btn btn-primary btn-sm" asp-action="Advice">
+                                                Advice <i class="fa-solid fa-pen-to-square"></i>
+                                            </button>
+                                        </form>
+                                        
+                                    </td>
                                 </tr>
                             }
                         </tbody>
                     </table>
-
-                    <form method="post" asp-action="Comment" class="frm">
-                        <h2>Give advice</h2>
-                        <input name="clientId" value="@Model.Client.Id" hidden>
-                        <input name="advisorId" value="@Model.AppUser.Id" hidden>
-                        <input name="adviceId" value="@Model.adviceId" hidden>
-
-                        <div class="form-group">
-                            <label> <i class="fa-solid fa-money-bill-trend-up"></i> Balance: R @Model.BankAccount.Balance.ToString("0.00")</label>
-                            <br />
-                            <label><i class="fa-solid fa-money-bill-trend-up"></i>  Money-in: R @Model.MoneyIn.ToString("0.00")</label>
-                            <br />
-                            <label><i class="fa-solid fa-money-bill-trend-up"></i>  Money-out: R @Model.MoneyOut.ToString("0.00")</label>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="Comment"><i class="fa-duotone fa-solid fa-comment"></i> Comment</label>
-                            <textarea id="Comment" name="Comment" class="form-control" rows="4" required></textarea>
-                        </div>
-
-                        <button type="submit" class="btn btn-primary">Submit</button>
-                    </form>
                 </div>
             </div>
 

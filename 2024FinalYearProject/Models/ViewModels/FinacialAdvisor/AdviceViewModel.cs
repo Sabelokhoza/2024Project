@@ -8,5 +8,12 @@
       public  List<Transaction> Transactions { get; set; }
       public decimal MoneyIn { get; set; }
       public decimal MoneyOut { get; set;}
+        public int adviceId { get; set; }
+    }
+    public class PendingAdviseModel
+    {
+        public AppUser User { get; set; }
+        public List<Advice> PendingAdvices { get; set; }
+        
     }
 }

@@ -159,8 +159,11 @@
                         <i class="fab fa-cc-visa fa-2x"></i>
                     </div>
                 </div>
+                
             </div>
-
+            <div>
+                <a class="btn btn-primary btn-sm" asp-action="RequestFinacialAdvice" onclick="return confirm('Are you sure you want to request financial advice?If yes click Ok , and advisor will be in-touch.')">Request Financial Advice</a>
+            </div>
             <div class="transfer-form mb-4">
                 <h5 class="mb-3">Transfer</h5>
                 <form method="post" action="Transfer" class="row g-3 align-items-center" id="depositForm">

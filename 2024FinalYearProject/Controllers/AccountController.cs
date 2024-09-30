@@ -111,8 +111,8 @@ namespace _2024FinalYearProject.Controllers
                         notification1.UserEmail = user.Email;
                         notification1.NotificationDate = DateTime.Now;
                         notification1.Message = "Welcome to UniBank , you have recieved R150 siging fee";
-
-                        await wrapper.Notification.AddAsync(notification);
+                        
+                        await wrapper.Notification.AddAsync(notification1);
 
                         return RedirectToAction("Wallet", "Client");
                     }

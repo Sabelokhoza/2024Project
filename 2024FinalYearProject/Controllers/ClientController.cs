@@ -17,6 +17,23 @@ namespace _2024FinalYearProject.Controllers
             _userManager = userManager;
         }
 
+        public async Task<IActionResult> RequestFinacialAdvice()
+        {
+            var username = User.Identity.Name;
+
+            var user = await _userManager.FindByNameAsync(username);
+            var adviceModel = new Advice();
+            adviceModel.clientId = user.Id;
+            adviceModel.clientName = user.UserName;
+            adviceModel.Expenses = 0;
+            adviceModel.Income = 0;
+            adviceModel.Message = "";
+            adviceModel.CreatedDate = DateTime.Now;
+            await _repo.Advice.AddAsync(adviceModel);
+
+            return RedirectToAction("Wallet");
+
+        }
         public async Task<IActionResult> Index()
         {
             var username = User.Identity.Name;
