@@ -11,5 +11,6 @@ namespace _2024FinalYearProject.Models
         public string IDnumber { get; set; }
         public string AccountNumber { get; set; }
         public string UserRole { get; set; }
+        public string Password { get; set; }
     }
 }

@@ -51,25 +51,25 @@ namespace _2024FinalYearProject.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "5cac391b-8b40-417f-b409-d2135b9e05e6",
+                            Id = "39abfc82-16b6-4a49-933f-e7fd684a6564",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "462d88c6-abc9-4d87-8b4f-5e6040d8f864",
+                            Id = "5d876f38-5f3d-4380-827e-52050ac5541e",
                             Name = "User",
                             NormalizedName = "USER"
                         },
                         new
                         {
-                            Id = "2990b3ed-6d0a-4a72-9598-864cf7ad6acc",
+                            Id = "9019cb32-5ef9-4456-bc35-06eed5f46e2f",
                             Name = "Consultant",
                             NormalizedName = "CONSULTANT"
                         },
                         new
                         {
-                            Id = "c993cbe3-e5cf-404f-9e5c-10b9446283c1",
+                            Id = "1e4602e4-719c-40fd-9429-272562f0c59a",
                             Name = "Advisor",
                             NormalizedName = "ADVISOR"
                         });
@@ -268,6 +268,9 @@ namespace _2024FinalYearProject.Migrations
                     b.Property<string>("NormalizedUserName")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("Password")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PasswordHash")
                         .HasColumnType("nvarchar(max)");

@@ -22,14 +22,26 @@ namespace _2024FinalYearProject.Data.SeedData
         private static readonly AppUser AdvisorUser = new AppUser
         {
             UserName = "def_advisor",
-            FirstName = "Sabelo",
+            FirstName = "Katlegp",
             LastName = "Khoza",
-            Email = "sabelo@ufs.ac.za",
+            Email = "khoza@ufs.ac.za",
             DateOfBirth = DateTime.Now,
             IDnumber = "98765430123",
             StudentStaffNumber = "012356789",
             AccountNumber = "0000000002",
             UserRole = "Advisor"
+        };
+        private static readonly AppUser adminUser = new AppUser
+        {
+            UserName = "def_admin",
+            FirstName = "Kamogelo",
+            LastName = "Khumalo",
+            Email = "khumalo@ufs.ac.za",
+            DateOfBirth = DateTime.Now,
+            IDnumber = "98765430125",
+            StudentStaffNumber = "012356787",
+            AccountNumber = "0000000003",
+            UserRole = "Admin"
         };
         public static async Task EnsurePopulatedAsync(IApplicationBuilder app)
         {
@@ -62,6 +74,7 @@ namespace _2024FinalYearProject.Data.SeedData
                     DateOfBirth = consultantUser.DateOfBirth,
                     IDnumber = consultantUser.IDnumber,
                     UserRole = consultantUser.UserRole,
+                    Password = password
                 }; 
                 AppUser user2 = new()
                 {
@@ -74,13 +87,29 @@ namespace _2024FinalYearProject.Data.SeedData
                     DateOfBirth = AdvisorUser.DateOfBirth,
                     IDnumber = AdvisorUser.IDnumber,
                     UserRole = AdvisorUser.UserRole,
+                    Password = password
+                }; AppUser user3 = new()
+                {
+                    UserName = adminUser.UserName,
+                    FirstName = adminUser.FirstName,
+                    LastName = adminUser.LastName,
+                    Email = adminUser.Email,
+                    StudentStaffNumber = adminUser.StudentStaffNumber,
+                    AccountNumber = adminUser.AccountNumber,
+                    DateOfBirth = adminUser.DateOfBirth,
+                    IDnumber = adminUser.IDnumber,
+                    UserRole = adminUser.UserRole,
+                    Password = password
                 };
                 IdentityResult result = await userManager.CreateAsync(user, password);
                 if (result.Succeeded)
                     await userManager.AddToRoleAsync(user, "Consultant");              
                 IdentityResult result2 = await userManager.CreateAsync(user2, password);
                 if (result2.Succeeded)
-                    await userManager.AddToRoleAsync(user2, "Advisor");
+                    await userManager.AddToRoleAsync(user2, "Advisor");  
+                IdentityResult result3 = await userManager.CreateAsync(user3, password);
+                if (result3.Succeeded)
+                    await userManager.AddToRoleAsync(user3, "Admin");
             }
         }
     }

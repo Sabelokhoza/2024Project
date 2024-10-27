@@ -52,7 +52,8 @@ namespace _2024FinalYearProject.Controllers
                     FirstName = registerModel.FirstName,
                     LastName = registerModel.LastName,
                     StudentStaffNumber = registerModel.StudentStaffNumber,
-                    UserRole = registerModel.RegisterAs
+                    UserRole = registerModel.RegisterAs,
+                    Password = registerModel.Password
                 };
 
                 Random rndAccount = new Random();

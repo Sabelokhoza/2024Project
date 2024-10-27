@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace _2024FinalYearProject.Migrations
 {
     /// <inheritdoc />
-    public partial class nunuLL : Migration
+    public partial class First : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -19,9 +19,15 @@ namespace _2024FinalYearProject.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    AdviceText = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Message = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     clientId = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    advisorId = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    clientName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    advisorId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    advisorName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Amount = table.Column<double>(type: "float", nullable: false),
+                    Income = table.Column<double>(type: "float", nullable: false),
+                    Expenses = table.Column<double>(type: "float", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -54,6 +60,7 @@ namespace _2024FinalYearProject.Migrations
                     IDnumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     AccountNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UserRole = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Password = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -134,6 +141,22 @@ namespace _2024FinalYearProject.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Notifications", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Reports",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Message = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    userName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    consultantId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Date = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Reports", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -272,10 +295,10 @@ namespace _2024FinalYearProject.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "74ada071-f031-456e-9542-48b3482783e4", null, "User", "USER" },
-                    { "89db8047-c66c-43a6-b65f-06431c402993", null, "Admin", "ADMIN" },
-                    { "9c715a60-a494-4a44-bd7c-aeb0d8fa57ae", null, "Consultant", "CONSULTANT" },
-                    { "ebebf595-4011-488e-8669-e8f3cc2166b9", null, "Advisor", "ADVISOR" }
+                    { "1e4602e4-719c-40fd-9429-272562f0c59a", null, "Advisor", "ADVISOR" },
+                    { "39abfc82-16b6-4a49-933f-e7fd684a6564", null, "Admin", "ADMIN" },
+                    { "5d876f38-5f3d-4380-827e-52050ac5541e", null, "User", "USER" },
+                    { "9019cb32-5ef9-4456-bc35-06eed5f46e2f", null, "Consultant", "CONSULTANT" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -352,6 +375,9 @@ namespace _2024FinalYearProject.Migrations
 
             migrationBuilder.DropTable(
                 name: "Notifications");
+
+            migrationBuilder.DropTable(
+                name: "Reports");
 
             migrationBuilder.DropTable(
                 name: "Transactions");
